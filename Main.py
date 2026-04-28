@@ -1,3 +1,11 @@
+# ==========================================================
+# CONFIGURAÇÕES PARA COMPILAÇÃO (BUILDOZER.SPEC):
+# android.permissions = INTERNET, RECORD_AUDIO, QUERY_ALL_PACKAGES, MODIFY_AUDIO_SETTINGS
+# requirements = python3, kivy, plyer, PyAudio, SpeechRecognition, pyjnius
+# android.api = 33
+# android.entrypoint = org.kivy.android.PythonActivity
+# ==========================================================
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -116,39 +124,21 @@ class JarvisScreen(Screen):
             return "J.A.R.V.I.S.: Erro crítico na varredura de pacotes."
 
     def processar_ia(self, prompt):
-        """Lógica da IA com gatilho de nome obrigatório."""
         prompt = prompt.upper()
-        
         if not prompt.startswith("J.A.R.V.I.S"):
             return "SISTEMA: Erro de protocolo. Identifique-me pelo nome para que eu possa responder."
 
         comando = prompt.replace("J.A.R.V.I.S", "").strip().lower()
 
-        # Respostas inteligentes e proativas
         if "quem é você" in comando:
-            return "J.A.R.V.I.S.: Sou o Just A Rather Very Intelligent System. Estou aqui para gerenciar seus sistemas e facilitar sua vida, senhor."
-
-        elif "status" in comando or "como você está" in comando:
-            return "J.A.R.V.I.S.: Núcleo de processamento estável. Memória limpa. Estou operando em capacidade máxima."
-
+            return "J.A.R.V.I.S.: Sou o Just A Rather Very Intelligent System. Sua interface pessoal."
         elif "abrir" in comando:
             app_nome = comando.replace("abrir", "").strip()
             return self.abrir_app_android(app_nome)
-
         elif "hora" in comando:
             agora = datetime.datetime.now().strftime('%H:%M')
-            return f"J.A.R.V.I.S.: São precisamente {agora}. O senhor tem compromissos agendados?"
-
-        elif "obrigado" in comando:
-            return "J.A.R.V.I.S.: Por nada, senhor. Sempre um prazer ser útil."
-
-        else:
-            respostas_aleatorias = [
-                "J.A.R.V.I.S.: Interessante. Devo pesquisar mais sobre isso nos servidores?",
-                "J.A.R.V.I.S.: Comando não listado nos meus protocolos atuais. Deseja que eu aprenda?",
-                "J.A.R.V.I.S.: Estou à sua disposição, senhor. Como prefere prosseguir?"
-            ]
-            return random.choice(respostas_aleatorias)
+            return f"J.A.R.V.I.S.: São {agora}, senhor."
+        return "J.A.R.V.I.S.: Comando processado. Aguardando novas instruções."
 
     def ouvir_microfone(self, instance):
         r = sr.Recognizer()
@@ -160,12 +150,11 @@ class JarvisScreen(Screen):
                 self.input.text = f"J.A.R.V.I.S. {texto}"
                 self.executar(None)
             except:
-                self.falar("J.A.R.V.I.S.: A conexão de áudio oscilou. Poderia repetir?")
+                self.falar("J.A.R.V.I.S.: A conexão de áudio falhou.")
 
     def executar(self, instance):
         prompt = self.input.text
         if not prompt: return
-        
         resposta = self.processar_ia(prompt)
         self.falar(resposta)
         self.input.text = ""
