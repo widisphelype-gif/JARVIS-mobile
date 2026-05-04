@@ -39,7 +39,7 @@ class MenuScreen(Screen):
         )
         
         btn_acordar = Button(
-            text="ACORDAR CRIANÇA,\nO PAPAI CHEGOU", 
+            text="EXECUTAR", 
             font_size=18,
             halign="center",
             background_color=(0, 0.4, 0.8, 1),
@@ -52,7 +52,7 @@ class MenuScreen(Screen):
         self.add_widget(layout)
 
     def ativar_jarvis(self, instance):
-        frase = "Acordar criança, o papai chegou. Sistemas carregados. Estou online, senhor."
+        frase = "Sistemas carregados. Estou online, senhor."
         tts.speak(frase)
         self.manager.current = 'main'
 
@@ -69,7 +69,7 @@ class JarvisScreen(Screen):
         )
         
         self.input = TextInput(
-            hint_text="Digite: J.A.R.V.I.S. [comando]", 
+            hint_text="Digite: [comando]", 
             size_hint=(1, 0.2), 
             multiline=False,
             background_color=(0.1, 0.1, 0.1, 1),
