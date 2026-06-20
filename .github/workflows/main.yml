@@ -1,0 +1,38 @@
+name: Build V.L.A.D. APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Permite que você ative a criação do APK manualmente com um botão
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v3
+
+      - name: Instalar Dependências do Sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsqlite3-dev lldb lld
+          sudo apt-get install -y autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Compilar APK com o Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          buildozer_version: stable
+          command: buildozer android debug
+          repository_root: .
+
+      - name: Guardar o APK Pronto (Upload)
+        uses: actions/upload-artifact@v4
+        with:
+          name: VLAD-AI-APK
+          path: bin/*.apk
